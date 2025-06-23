@@ -2,10 +2,29 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0;url=https://your-target-url.com" />
     <title>Redirecting...</title>
+    <script>
+      // Grab URL parameters
+      const params = new URLSearchParams(window.location.search);
+      const igHandle = params.get("ig_handle") || "unknown";
+      const campaign = params.get("campaign") || "unknown";
+
+      // Send to n8n webhook
+      fetch("https://your-n8n-instance/webhook/ig-click", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ig_handle: igHandle, campaign })
+      }).catch((err) => {
+        console.warn("Failed to send to webhook:", err);
+      });
+
+      // Redirect after short delay (1 second to ensure webhook fires)
+      setTimeout(() => {
+        window.location.href = "https://thegrandtalontattoo.com.au/#request-a-booking";
+      }, 1000);
+    </script>
   </head>
   <body>
-    <p>If you are not redirected, <a href="https://your-target-url.com">click here</a>.</p>
+    <p>Redirecting you now…</p>
   </body>
 </html>
